@@ -1,4 +1,4 @@
-## Final Fantasy XIV - Endwalker
+## Off Topic: Final Fantasy XIV - Endwalker
 
 Final Fantasy XIV new expansion Endwalker launches for early access today!
 
