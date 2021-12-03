@@ -1,6 +1,13 @@
 
 ### Powershell notes
 
+
+[dbatools is a free PowerShell module with over 500 SQL Server best practice, administration, development and migration commands included](https://dbatools.io/commands/)
+
+
+[PowerShell Universal - Ironman Software](https://ironmansoftware.com/powershell-universal)
+
+
 SSRS things!
 ```
 [string] $url = "https://XXXXXXX.XXXX.XXXX.XXXX/Reports";
