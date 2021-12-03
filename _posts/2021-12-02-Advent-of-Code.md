@@ -1,4 +1,4 @@
-## Advent of Code
+## Advent of Code Challenge
 
 [This is a fun little thing.](https://adventofcode.com/)
 
