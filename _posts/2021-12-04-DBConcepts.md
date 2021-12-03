@@ -14,3 +14,6 @@
 
 
 [What is The Difference between 2NF and 3NF?](https://arctype.com/blog/2nf-3nf-normalization-example/)
+
+
+[Data Engineering Wiki](https://dataengineering.wiki/Learning+Resources)
