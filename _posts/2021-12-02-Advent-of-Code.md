@@ -8,7 +8,7 @@ I am, obviously, trying to do them all in t-SQL. The first day's puzzles were no
 
 
 <details>
-  <summary>Spoiler warning</summary>
+  <summary>Spoiler warning Day 1 Part 1 Solution</summary>
 
 ```tsql
 USE [TestDB];
@@ -56,7 +56,7 @@ END;
 
 
 <details>
-  <summary>Spoiler warning</summary>
+  <summary>Spoiler warning Day 1 Part 2 Solution</summary>
 
 ```tsql
   
