@@ -48,3 +48,6 @@ Congratulations, you now have a full size database as your own personal sandbox 
 
 
 [How to Think Like the SQL Server Engine](https://www.youtube.com/playlist?list=PLDYqU5RH_aX1VSVvjdla9TOKf939UhIDB)
+
+
+![Logical Processing Order](https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png)
