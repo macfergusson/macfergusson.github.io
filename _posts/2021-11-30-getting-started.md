@@ -64,6 +64,6 @@ Congratulations, you now have a full size database as your own personal sandbox 
 
 [[https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png]]
 
-[](https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png)
+[image1](https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png)
 
-[](images/Logical%20Processing%20Order.png)
+[image1](images/Logical%20Processing%20Order.png)
