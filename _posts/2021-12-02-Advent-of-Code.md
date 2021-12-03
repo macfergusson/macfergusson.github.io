@@ -8,9 +8,11 @@ I am, obviously, trying to do them all in t-SQL. The first day's puzzles were no
 
 
 <details>
+  
   <summary>Spoiler warning Day 1 Part 1 Solution</summary>
 
-```tsql
+<pre><code>
+
 USE [TestDB];
 GO
 
@@ -47,7 +49,8 @@ BEGIN
         ) AS DepthData
     ) DepthCount;
 END;
-```
+
+</code></pre>
 
 </details>
 
@@ -56,9 +59,10 @@ END;
 
 
 <details>
+  
   <summary>Spoiler warning Day 1 Part 2 Solution</summary>
 
-```tsql
+<pre><code>
   
   USE [TestDB];
 GO
@@ -91,6 +95,7 @@ BEGIN
         ) AS Group3
     ) Agg;
 END;
-  ```
+
+</code></pre>
 
 </details>
