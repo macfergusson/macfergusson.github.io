@@ -73,6 +73,3 @@ Congratulations, you now have a full size database as your own personal sandbox 
 
 <img src="/images/Logical%20Processing%20Order.png">
 
-<img src="./images/Logical%20Processing%20Order.png">
-
-<img src="../images/Logical%20Processing%20Order.png">
