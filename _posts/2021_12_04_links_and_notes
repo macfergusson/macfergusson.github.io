@@ -1,0 +1,707 @@
+## Interesting bits
+
+```tsql
+/*
+**    Create Numbers Table
+*/
+
+DECLARE @EndNum INT = 1000000;
+
+SELECT TOP (@EndNum + 1)
+       Num = IDENTITY(INT, 0, 1)
+INTO #Numbers
+FROM
+(SELECT TOP (1000) NotUsed = 1 FROM sys.columns) AS [1K] -- up to 1K
+    CROSS JOIN
+    (SELECT TOP (1000) NotUsed = 1 FROM sys.columns) AS [1M] -- up to 1M
+    CROSS JOIN
+    (SELECT TOP (1000) NotUsed = 1 FROM sys.columns) AS [1B] -- up to 1B
+;
+
+ALTER TABLE #Numbers
+ADD CONSTRAINT PK_Numbers
+    PRIMARY KEY CLUSTERED (Num);
+
+SELECT MinNum = MIN(Num),
+       MaxNum = MAX(Num),
+       NumRows = COUNT(*)
+FROM #Numbers;
+
+DECLARE @EarliestDateYouNeed DATE,
+        @LatestDateYouNeed DATE;
+
+SELECT @EarliestDateYouNeed = '2000-01-01',
+       @LatestDateYouNeed = GETDATE();
+
+SELECT Num,
+       DATEADD(MONTH, Num, '1900-01-01') Month
+FROM #Numbers
+WHERE Num
+BETWEEN DATEDIFF(MONTH, 0, @EarliestDateYouNeed) AND DATEDIFF(MONTH, 0, @LatestDateYouNeed);```
+
+
+https://www.youtube.com/watch?v=UMJV3OpjsoM
+4 Types of SQL Injection
+
+
+https://www.brentozar.com/blitz/high-virtual-log-file-vlf-count/
+
+http://adventuresinsql.com/2009/12/a-busyaccidental-dbas-guide-to-managing-vlfs/
+
+https://drewkal.com/fixing-highly-fragmented-vlfs-oltp/
+High Virtual Log File (VLF) Count - Brent Ozar Unlimited®
+
+
+
+https://docs.microsoft.com/en-us/sql/reporting-services/report-server/rsreportserver-config-configuration-file?redirectedfrom=MSDN&view=sql-server-ver15
+
+https://www.mssqltips.com/sqlservertip/2735/prevent-sql-server-reporting-services-slow-startup/
+
+https://braingrabber.wordpress.com/2013/01/17/ms-reporting-service-2012-slow-startup/
+
+https://docs.microsoft.com/en-us/archive/blogs/emilianb/slow-response-time-for-sql-server-reporting-services-after-restart-or-after-period-of-inactivity-why-does-it-happen-and-how-to-fix-it
+
+```
+[string] $url = "https://XXXXXXX.XXXX.XXXX.XXXX/Reports";
+
+[System.Net.WebClient] $wc = New-Object System.Net.WebClient;
+$wc.UseDefaultCredentials = $true;
+$result = $wc.DownloadString($url);
+$wc.Dispose();
+```
+
+
+
+copy  system level security(site settings) and folder level  roles from old server to new  SSRS server. 
+```$SSRSReportServer = '#{SSRS_Report Execution Url}'
+Get-RsCatalogItemRole -ReportServerUri $SSRSReportServer  -Recurse | select Identity,TypeName,Roles, ParentSecurity,Path | ft -AutoSize | out-string -Width 2000 > "D:\XXXXX\XXXX\$env:COMPUTERNAME - permissions.txt"
+```
+
+then loop through those results and do something like this...
+```$TheSSRSServer           = "https://xxxxxxx.xxxxxx.xxxx.xxxx/ReportServer"
+Grant-RsCatalogItemRole  -Identity $XXX     -RoleName "Publisher"          -Path $Folder -ReportServerUri $TheSSRSServer 
+```
+
+
+
+```
+    Grant-RsSystemRole
+    
+SYNOPSIS
+    This script grants access to SQL Server Reporting Services Instance to users/groups.
+    
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS C:\>Grant-RsSystemRole -Identity 'johnd' -RoleName 'System User'
+    
+    Description
+    -----------
+    This command will establish a connection to the Report Server located at http://localhost/reportserver using current user's credentials and then grant 'System User' access to user 'johnd'.
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS C:\>Grant-RsSystemRole -ReportServerUri 'http://localhost/reportserver_sql2012' -Identity 'johnd' -RoleName 'System User'
+    
+    Description
+    -----------
+    This command will establish a connection to the Report Server located at http://localhost/reportserver_2012 using current user's credentials and then grant 'System User' access to user 'johnd'.
+    
+    
+    
+    
+    -------------------------- EXAMPLE 3 --------------------------
+    
+    PS C:\>Grant-RsSystemRole -ReportServerCredentials 'CaptainAwesome' -Identity 'johnd' -RoleName 'System User'
+    
+    Description
+    -----------
+    This command will establish a connection to the Report Server located at http://localhost/reportserver using CaptainAwesome's credentials and then grant 'System User' access to user 'johnd'.
+
+
+```
+
+
+
+
+```tsql
+USE msdb;
+GO
+
+BEGIN TRANSACTION;
+
+DECLARE @ReturnCode INT;
+
+SELECT @ReturnCode = 0;
+
+IF NOT EXISTS (
+                SELECT syscategories.name
+                FROM msdb.dbo.syscategories
+                WHERE syscategories.name = N'Database Maintenance'
+                      AND syscategories.category_class = 1
+              )
+BEGIN
+  EXEC @ReturnCode = msdb.dbo.sp_add_category @class = N'JOB' ,
+                                              @type = N'LOCAL' ,
+                                              @name = N'Database Maintenance';
+
+  IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+    GOTO QuitWithRollback;
+END;
+
+DECLARE @jobId BINARY(16);
+
+EXEC @ReturnCode = msdb.dbo.sp_add_job @job_name = N'Ssrs Wake-Up Call Job' ,
+                                       @enabled = 1 ,
+                                       @notify_level_eventlog = 2 ,
+                                       @notify_level_email = 0 ,
+                                       @notify_level_netsend = 0 ,
+                                       @notify_level_page = 0 ,
+                                       @delete_level = 0 ,
+                                       @description = N'Frequently Ssrs Wake-Up Call with a PowerShell Script.' ,
+                                       @category_name = N'Database Maintenance' ,
+                                       @owner_login_name = N'xxx\xxxxxx' ,
+                                       @job_id = @jobId OUTPUT;
+
+IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+  GOTO QuitWithRollback;
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id = @jobId ,
+                                           @step_name = N'Ssrs Wake-Up Step Reports-d' ,
+                                           @step_id = 1 ,
+                                           @cmdexec_success_code = 0 ,
+                                           @on_success_action = 1 ,
+                                           @on_success_step_id = 0 ,
+                                           @on_fail_action = 2 ,
+                                           @on_fail_step_id = 0 ,
+                                           @retry_attempts = 1 ,
+                                           @retry_interval = 0 ,
+                                           @os_run_priority = 0 ,
+                                           @subsystem = N'PowerShell' ,
+                                           @command = N'[string] $url = "https://xxxxx.xxxx.xxxx.xxxx/Reports";
+
+[System.Net.WebClient] $wc = New-Object System.Net.WebClient;
+$wc.UseDefaultCredentials = $true;
+$result = $wc.DownloadString($url);
+$wc.Dispose();' ,
+                                           @database_name = N'master' ,
+                                           @flags = 0 ,
+                                           @proxy_name = N'Run SQL Automation';
+
+IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+  GOTO QuitWithRollback;
+
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId ,
+                                          @start_step_id = 1;
+
+IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+  GOTO QuitWithRollback;
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id = @jobId ,
+                                               @name = N'Ssrs Wake-Up Call Schedule' ,
+                                               @enabled = 1 ,
+                                               @freq_type = 4 ,
+                                               @freq_interval = 1 ,
+                                               @freq_subday_type = 4 ,
+                                               @freq_subday_interval = 15 ,
+                                               @freq_relative_interval = 0 ,
+                                               @freq_recurrence_factor = 0 ,
+                                               @active_start_date = 19900101 ,
+                                               @active_end_date = 99991231 ,
+                                               @active_start_time = 1500 ,
+                                               @active_end_time = 235959;
+
+IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+  GOTO QuitWithRollback;
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId ,
+                                             @server_name = N'(local)';
+
+IF ( @@ERROR <> 0 OR @ReturnCode <> 0 )
+  GOTO QuitWithRollback;
+
+COMMIT TRANSACTION;
+
+GOTO EndSave;
+
+QuitWithRollback:
+IF ( @@TRANCOUNT > 0 )
+  ROLLBACK TRANSACTION;
+
+EndSave:
+GO
+```
+
+
+
+
+https://sqlity.net/en/2451/physloc/
+Where are my Rows? - Using the %%physloc%% Virtual Column - sqlity.net
+Sometimes it is helpful to know on which page exactly SQL Server has stored a particular row. You can use the undocumented column to find out.
+
+
+
+https://youtu.be/3EwDn9hqgkg
+Deadlocks: Lets Do One, Understand It, and Fix It - Brent Ozar
+
+
+
+https://dbfiddle.uk/
+db<>fiddle
+Free online SQL environment for experimenting and sharing.
+
+
+
+https://sqlblog.org/2021/10/12/t-sql-tuesday-143-worst-metadata
+T-SQL Tuesday #143 : Preparing for the Worst… Metadata
+For this month’s T-SQL Tuesday, I talk about the scripts I use to keep a local system with all kinds of oddball metadata scenarios.
+
+
+https://www.youtube.com/watch?v=qI7YzTq-AG0&t=90s
+Revenge: The SQL! - Rob Volk
+
+
+https://youtube.com/playlist?list=PLUoebdZqEHTwbYD8oo6Wr81Xb7uCAh_oz
+Diagramming Tutorials
+This playlist has tutorials to help you with your diagramming needs. Currently we have having training videos on Entity Relationship Diagrams (or ERDs).
+Image
+
+
+
+https://dbatools.io/commands/
+dbatools is a free PowerShell module with over 500 SQL Server best practice, administration, development and migration commands included. Currently, other components of SQL Server such as SSIS, SSR…
+
+
+
+https://www.mssqltips.com/sqlservertip/1584/auto-generate-sql-server-restore-script-from-backup-files-in-a-directory/
+Auto Generate SQL Server Restore Script from Backups in a Directory
+There are several ways of automating the SQL Server restore process and creating a script, but this approach shows a way this can be done by just reading the contents of a directory for the backup files that exist.
+
+
+
+https://www.littlekendra.com/2017/08/14/interviewing-patterns-anti-patterns-advice-from-the-sql-server-community/
+Interviewing Patterns & Anti-Patterns: Advice from the SQL Server C...
+
+
+https://www.youtube.com/playlist?list=PLDYqU5RH_aX1VSVvjdla9TOKf939UhIDB
+How to Think Like the SQL Server Engine
+Every developer and database administrator should start here.
+
+
+
+
+https://github.com/davew-msft/synapse
+
+
+
+r@ndolph.ca
+
+https://docs.microsoft.com/en-us/sql/relational-databases/tables/temporal-table-considerations-and-limitations?view=sql-server-ver15
+Temporal Table Considerations and Limitations - SQL Server
+
+
+
+https://docs.microsoft.com/en-us/sql/relational-databases/tables/manage-retention-of-historical-data-in-system-versioned-temporal-tables?view=sql-server-ver15
+Manage retention of historical data in system-versioned temporal tables
+
+
+https://info.sentryone.com/kkline-session-slides
+Kevin's Speaker LP
+
+
+
+https://www.littlekendra.com/2021/10/14/learn-azure-sql-free-learning-path/
+Learn Azure SQL with One Free Learning Path
+A review of the Azure SQL Fundamentals Learning Path.
+
+
+
+
+https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/how-lag-compares-to-other-techniques/
+Simple Talk
+Kathi Kellenberger
+How LAG compares to other techniques - Simple Talk
+LAG pulls a column from another row without a self-join. In this article, Kathi Kellenberger shows how LAG compares to other techniques
+
+
+https://github.com/KathiKellenberger/T-SQL_Window_Functions/
+
+
+https://sqlkitty.com/
+
+https://github.com/sqlkitty
+
+
+
+https://github.com/sqlbek/
+
+https://sqlbek.wordpress.com/
+
+
+
+
+https://www.brentozar.com/archive/2015/05/how-to-fake-load-tests-with-sqlquerystress/
+How to Fake Load Tests with SQLQueryStress - Brent Ozar Unlimited®
+Load testing – real, serious load testing – is hard. In a perfect world, you want to exactly simulate the kinds of queries that the end users will be throwing at your SQL Server. However, in the words of a timeless philosopher, ain’t nobody got time for that. Instead, let’s use the neato open source tool...
+
+
+
+
+https://www.brentozar.com/archive/2013/01/implementing-snapshot-or-read-committed-snapshot-isolation-in-sql-server-a-guide/
+How to Turn on Snapshot Isolation in SQL Server
+Ever wanted to use Snapshot or Read Committed Snapshot Isolation Levels in SQL Server? Learn how to turn them on safely.
+
+
+
+
+http://www.keepitsimpleandfast.com/2011/09/localization-of-your-ssrs-reports.html
+Localization of your SSRS reports. Translations of labels in your r...
+Localization is not a build in feature in SQL Server Reporting Service (SSRS). The user experience is very important for the success of your...
+Image
+
+
+
+https://www.sommarskog.se/sqlutil/SearchCode.html
+
+
+https://www.itprotoday.com/sql-server/t-sql-puzzle-challenge-grouping-connected-items
+T-SQL Puzzle Challenge: Grouping Connected Items
+The challenge involves an undirected cyclic graph that represents pairs of connected nodes that have some kind of a relationship between them. The goal is to group all nodes that are connected either directly or indirectly (transitively).
+Image
+
+
+http://portquiz.net:1433/
+
+
+
+https://ironmansoftware.com/powershell-universal
+PowerShell Universal - Ironman Software
+PowerShell Universal is the ultimate platform for building web-based IT tools. Expose APIs, run scripts and build websites using a single tool.
+
+
+
+https://www.brentozar.com/sql/deadlocks/
+Brent Ozar Unlimited®
+Deadlocks: let's do one, understand it, and fix it. - Brent Ozar Un...
+You keep getting warnings and emails about deadlocks, but let’s be honest: you’re not really sure how they happen or what to do about it. I’ll show you how to build a deadlock in just a few lines of T-SQL so you can see how SQL Server reacts. You’ll be more comfortable with the decisions...
+
+
+
+https://sqlblog.org/merge
+So, you want to use MERGE, eh?
+Please don’t. Every time I see a question about MERGE, I scramble for the links I post to urge people to change their minds. So I put them together here: Use Caution with SQL Server’s M…
+
+
+https://sqlbolt.com/
+SQLBolt - Learn SQL - Introduction to SQL
+SQLBolt provides a set of interactive lessons and exercises to help you learn SQL
+
+
+https://www.youtube.com/c/KevinStratvert/search
+
+
+
+
+
+https://wiki.python.org/moin/BeginnersGuide
+
+
+https://www.sqlskills.com/
+SQL Server Training & Consulting for DBAs & Developers | SQLskills
+With training and consulting from SQLskills, you’ll proactively drive your team’s success, rather than just reacting to your database issues.
+Image
+
+
+https://www.glassdoor.com/blog/7-research-job-interview/
+7 Things to Research Before Any Job Interview
+Walk into your interview with the knowledge you need with these 7 tips.
+
+
+https://www.virtualbox.org/wiki/Downloads
+
+
+```
+What’s the work environment like, with specifics like traffic, meetings, and work space?
+What are the specific duties of the team?
+What will your duties be?
+What’s the management structure and how does it impact your team and your role?
+What technologies will you be working with?
+What is the corporate and team culture like?
+```
+
+
+https://python.land/creating-python-programs/vscode-gui-tour
+Python Land
+VSCode GUI tour: Explore The Elements of This Powerful IDE
+
+
+https://replit.com/languages/python3
+Python Online Compiler & Interpreter
+Write and run Python code using our Python online compiler & interpreter. You can build, share, and host applications right from your browser!
+Image
+
+
+https://www.sommarskog.se/error_handling/Part1.html
+
+
+https://dataengineering.wiki/Learning+Resources
+
+
+https://www.youtube.com/watch?v=85rJ-9vQBbU
+Inside the VertiPaq Engine - Marco Russo
+
+
+
+https://dbdiagram.io/home
+A Free Database Designer for Developers and Analysts
+Quick and simple free tool to help you draw your database relationship diagrams and flow quickly using just keyboard
+
+
+https://www.developerfusion.com/article/84374/solving-sudoku-with-sql/
+Solving Sudoku with SQL - Database tutorial - developer Fusion
+If you thought Sudoku was a challenge, then consider the more interesting challenge of writing a program to solve it. Samuel Aina shows how in T-SQL.
+
+
+https://twitter.com/code/status/1457428301266370563?t=IpsLMTtGtjQF_N9tBpD6Xw&s=19
+
+https://sqlperformance.com/2014/07/t-sql-queries/isolation-levels
+SQLPerformance.com
+SQL Server Isolation Levels : A Series - SQLPerformance.com
+Paul White (@SQL_Kiwi) has put together a great series on concurrency, the ACID properties of statements & transactions, and isolation levels in SQL Server.
+
+
+https://sqlperformance.com/2013/10/sql-plan/parallel-plans-branches-threads
+SQLPerformance.com
+Parallel Execution Plans - Branches and Threads - SQLPerformance.com
+Paul White (@SQL_Kiwi) dives deep into new execution plan information introduced in SQL Server 2012; specifically, thread reservation and usage information for parallel plans.
+
+
+https://www.sql.kiwi/2011/12/forcing-a-parallel-query-execution-plan.html
+Forcing a Parallel Query Execution Plan
+How to force SQL Server to generate a parallel execution plan, including many of the reasons the server sometimes chooses a serial plan.
+
+
+
+https://www.red-gate.com/simple-talk/databases/sql-server/learn/introduction-to-sql-server-sequence-objects/
+Introduction to SQL Server sequence objects - Simple Talk
+SQL Server sequence objects can be used in place of identity columns. In this article, Greg Larsen explains how to set up and use sequence objects.
+
+
+
+```
+Sub GetSheets()
+Path = "C:\[PATH TO FILES]"
+Filename = Dir(Path & "*.xls")
+ Do While Filename <> ""
+ Workbooks.Open Filename:=Path & Filename, ReadOnly:=True
+ For Each Sheet In ActiveWorkbook.Sheets
+ Sheet.Copy After:=ThisWorkbook.Sheets(1)
+ Next Sheet
+ Workbooks(Filename).Close
+ Filename = Dir()
+ Loop
+End Sub
+```
+
+```
+Sub MergeExcelFiles()
+    Dim fnameList, fnameCurFile As Variant
+    Dim countFiles, countSheets As Integer
+    Dim wksCurSheet As Worksheet
+    Dim wbkCurBook, wbkSrcBook As Workbook
+ 
+    fnameList = Application.GetOpenFilename(FileFilter:="Microsoft Excel Workbooks (*.xls;*.xlsx;*.xlsm),*.xls;*.xlsx;*.xlsm", Title:="Choose Excel files to merge", MultiSelect:=True)
+ 
+    If (vbBoolean <> VarType(fnameList)) Then
+ 
+        If (UBound(fnameList) > 0) Then
+            countFiles = 0
+            countSheets = 0
+ 
+            Application.ScreenUpdating = False
+            Application.Calculation = xlCalculationManual
+ 
+            Set wbkCurBook = ActiveWorkbook
+ 
+            For Each fnameCurFile In fnameList
+                countFiles = countFiles + 1
+ 
+                Set wbkSrcBook = Workbooks.Open(Filename:=fnameCurFile)
+ 
+                For Each wksCurSheet In wbkSrcBook.Sheets
+                    countSheets = countSheets + 1
+                    wksCurSheet.Copy after:=wbkCurBook.Sheets(wbkCurBook.Sheets.Count)
+                Next
+ 
+                wbkSrcBook.Close SaveChanges:=False
+ 
+            Next
+ 
+            Application.ScreenUpdating = True
+            Application.Calculation = xlCalculationAutomatic
+ 
+            MsgBox "Processed " & countFiles & " files" & vbCrLf & "Merged " & countSheets & " worksheets", Title:="Merge Excel files"
+        End If
+ 
+    Else
+        MsgBox "No files selected", Title:="Merge Excel files"
+    End If
+End Sub```
+
+
+
+https://pythoninoffice.com/use-python-to-combine-multiple-excel-files/
+Use Python to combine multiple Excel files into one master spreadsh...
+Need to aggregate many Excel files/sheets together? It's easy to use Python to combine multiple Excel files into one master spreadsheeet.
+
+
+https://stackoverflow.com/questions/47743741/combining-excel-workbook-sheet-into-one-using-python
+Combining excel workbook sheet into one using python
+
+https://stackoverflow.com/questions/25400240/using-pandas-combining-merging-2-different-excel-files-sheets
+Using pandas Combining/merging 2 different Excel files/sheets
+
+
+https://towardsdatascience.com/best-5-free-stock-market-apis-in-2019-ad91dddec984
+Best 5 free stock market APIs in 2020
+The financial APIs market grows so quickly that last year’s post or platform is not a good choice this year. So in this story, I will show…
+
+```
+You could download the entire stock market data to a database. Yahoo has a decent API that includes international markets. Just the US and Canada data set is 10,000 plus stocks. And start looking for stocks going up or down the most. That's what I did. Unless, you're paying for such service most people don't have access to such information even though is free. This gives you a leg up over other investor e.g. in Reddit of a few days before they catch up. Useful specially for finding SPACs in their way up before announcements or shortly after but still ahead of the crowd.
+
+If you got R then run a classification algorithm once or twice a year when Indexes like the Russell rebalance. Because hedge funds and ETFs that follow indexes have to buy shares on the new companies added and dropped after rebalancing the prices in such companies experience a quick upward or downward price change. A company added to the Russell 3000 can see an increase sometimes up to 50% because they are relatively small and the number of shares traded is a relatively large during the reindexing. So, you can make money both ways with options going long or short (with the companies dropped from the index). All what you need is to run some classification algo to identify the most likely companies in or out of an index. 
+
+Don't forget to use calls and puts strategically to limit your losses. It works like an insurance, they limit your upside potential a bit but protect you in case you missed a few.
+```
+
+https://reg.passdatacommunitysummit.com/flow/redgate/summit2021/portal/page/attendee
+Attendee Portal
+
+
+https://tsqlt.org/
+tSQLt - Database Unit Testing for SQL Server
+
+
+https://www.sqlshack.com/sql-unit-testing-with-the-tsqlt-framework-for-beginners/
+SQL Shack - articles about database auditing, server performance, data recovery, and more
+SQL unit testing with the tSQLt framework for beginners
+tSQLt is a powerful, open source framework for SQL Server unit testing. In this article, we will mainly focus on how to create and run SQL unit testing with help of the tSQLt framework.
+
+
+https://docs.microsoft.com/en-us/sql/ssdt/walkthrough-creating-and-running-a-sql-server-unit-test?view=sql-server-ver15
+Creating and Running a SQL Server Unit Test - SQL Server Data Tools...
+Learn how to create a SQL Server unit test. Walk through the steps of setting up a test that detects an error in a stored procedure.
+
+
+https://www.youtube.com/watch?v=jx-FuNp4fOA
+Kevin Feasel
+"Black Arts" Index Maintenance #1 – GUIDs v.s. Fragmentation by Jef...
+
+
+https://www.youtube.com/watch?v=rvZwMNJxqVo
+Black Arts Index Maintenance 1.2 - Guids vs. Fragmentation | Jeff M...
+
+
+https://www.youtube.com/watch?v=cepspxPAUTA
+CBT Nuggets
+How to Design Your First Database
+
+
+
+https://youtu.be/PXvgsaBiVOo
+Kendra Little
+Why Table Partitioning Doesn't Speed Up Query Performance
+
+
+
+
+https://reg.passdatacommunitysummit.com/flow/redgate/summit2021/portal/page/sessions/session/1635972632560001HvdQ
+SQL PASS Attendee Portal
+
+
+https://www.straightforwardsql.com/tags/extended-events/
+Extended Events
+
+
+https://www.straightforwardsql.com/posts/query-store-default-settings/
+Query Store default settings
+Query store is a great tool and comes with a set of default settings. But what are the values exactly?
+
+https://www.sqlozano.com/qdstoolbox-planminer/
+SQLozano
+Extracting information from execution plans
+
+
+https://github.com/channeladvisor/qdstoolbox
+GitHub - channeladvisor/qdstoolbox: Tools for management of SQL Ser...
+Tools for management of SQL Server's Query Store data - GitHub - channeladvisor/qdstoolbox: Tools for management of SQL Server's Query Store data
+
+
+https://github.com/awesomedata/awesome-public-datasets
+GitHub - awesomedata/awesome-public-datasets: A topic-centric list ...
+A topic-centric list of HQ open datasets. Contribute to awesomedata/awesome-public-datasets development by creating an account on GitHub.
+
+https://www.sommarskog.se/share_data.html
+
+https://metaplane.dev/
+Metaplane | Data Observability For Modern Data Teams
+Metaplane is a data observability platform that helps data teams know when things break, what went wrong, and how to fix it.
+
+
+https://www.erikdarlingdata.com/sql-server/of-temporary-tables-and-plan-cache-pollution/
+Erik Darling
+Of Temporary Tables And Plan Cache Pollution
+
+
+
+https://www.straightforwardsql.com/posts/investigating-errors-with-extended-events/
+Investigating Errors With Extended Events
+This is my go-to technique to capture errors which I can debug later.
+
+
+https://docs.microsoft.com/en-us/sql/t-sql/queries/select-transact-sql?view=sql-server-ver15#logical-processing-order-of-the-select-statement
+
+
+
+https://statisticsparser.com/
+
+
+
+
+interview questions: https://pastebin.com/NB63sbYE
+SQL Analyst 1-IV Candidate Interview - Pastebin.com
+
+
+
+https://www.guru99.com/database-normalization.html
+What is Normalization in DBMS (SQL)? 1NF, 2NF, 3NF, BCNF Database w...
+Normalization in Database 1NF, 2NF, 3NF, BCNF, 4NF, 5NF, 6NF. Normalization is a database design technique which organizes tables in a manner that reduces redundancy and dependency of data.
+
+https://arctype.com/blog/2nf-3nf-normalization-example/
+What is The Difference between 2NF and 3NF?
+Database Normalization is crucial for optimizing the usage of system storage and resources. This article explains the differences between DBMS normal forms (2NF and 3NF) with a simple example.
+
+
+
+
+http://whoisactive.com/docs/28_access/
+sp_whoisactive: Access for All!
+Learn about giving access to sp_whoisactive
+
+
+https://adventofcode.com/
+
+
+
+https://www.erikdarlingdata.com/sql-server/why-does-fast_forward-make-some-cursors-so-much-faster/
+Erik Darling Data
+Joe Obbish
+Why does FAST_FORWARD make some cursors so much faster?
+
+https://www.sqlskills.com/help/accidental-dba/#:~:text=An%20Accidental%20DBA%20(also%20sometimes,company%27s%20SQL%20Server%20instances%20properly.
+SQLskills
+Accidental DBA Series | SQLskills
+This series of posts is focused on helping Accidental DBAs keep SQL Server running with minimal problems,
