@@ -29,3 +29,22 @@ Congratulations, you now have a full size database as your own personal sandbox 
 [db-fiddle](https://www.db-fiddle.com/)
 
 [sqlfiddle](http://sqlfiddle.com/)
+
+---
+
+### Basic Training Resources
+
+
+[SQLBolt - Learn SQL](https://sqlbolt.com/)
+
+
+[SQL Discord](https://discord.gg/5c5ge7a7Ku)
+
+
+[Logical processing order of the SELECT statement - Microsoft](https://docs.microsoft.com/en-us/sql/t-sql/queries/select-transact-sql?view=sql-server-ver15#logical-processing-order-of-the-select-statement)
+
+
+[SQL Server Training & Consulting for DBAs & Developers ](https://www.sqlskills.com/)
+
+
+[How to Think Like the SQL Server Engine](https://www.youtube.com/playlist?list=PLDYqU5RH_aX1VSVvjdla9TOKf939UhIDB)
