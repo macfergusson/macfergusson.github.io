@@ -1,20 +1,20 @@
 ## Learn SQL Server for free on your PC at home!
 
-### Download SQL Server Developer Edition here: 
+### Download SQL Server Developer Edition
 
-[https://www.microsoft.com/en-us/sql-server/sql-server-downloads]
+[Microsoft Website](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
 Install that first.
 
-### Download SSMS here: 
+### Download SSMS 
 
-[https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms]
+[Microsoft Website](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 Install that second.
 
-### Download a sample database here: 
+### Download a sample database 
 
-[https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/]
+[Brent Ozar's Stack Overflow](https://www.brentozar.com/archive/2015/10/how-to-download-the-stack-overflow-database-via-bittorrent/)
 
 Follow the directions to attach the database.
 
