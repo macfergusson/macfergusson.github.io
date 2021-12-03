@@ -19,3 +19,13 @@ Install that second.
 Follow the directions to attach the database.
 
 Congratulations, you now have a full size database as your own personal sandbox to play in!
+
+---
+
+### Online Query Sharing
+
+[db<>fiddle](https://dbfiddle.uk/)
+
+[db-fiddle](https://www.db-fiddle.com/)
+
+[sqlfiddle](http://sqlfiddle.com/)
