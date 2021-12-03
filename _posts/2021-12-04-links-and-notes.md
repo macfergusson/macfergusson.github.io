@@ -694,10 +694,6 @@ sp_whoisactive: Access for All!
 Learn about giving access to sp_whoisactive
 
 
-https://adventofcode.com/
-
-
-
 https://www.erikdarlingdata.com/sql-server/why-does-fast_forward-make-some-cursors-so-much-faster/
 Erik Darling Data
 Joe Obbish
