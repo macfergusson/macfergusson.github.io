@@ -37,7 +37,8 @@ SELECT Num,
        DATEADD(MONTH, Num, '1900-01-01') Month
 FROM #Numbers
 WHERE Num
-BETWEEN DATEDIFF(MONTH, 0, @EarliestDateYouNeed) AND DATEDIFF(MONTH, 0, @LatestDateYouNeed);```
+BETWEEN DATEDIFF(MONTH, 0, @EarliestDateYouNeed) AND DATEDIFF(MONTH, 0, @LatestDateYouNeed);
+```
 
 
 https://www.youtube.com/watch?v=UMJV3OpjsoM
@@ -549,7 +550,8 @@ Sub MergeExcelFiles()
     Else
         MsgBox "No files selected", Title:="Merge Excel files"
     End If
-End Sub```
+End Sub
+```
 
 
 
