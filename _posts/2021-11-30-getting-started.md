@@ -50,4 +50,4 @@ Congratulations, you now have a full size database as your own personal sandbox 
 [Logical processing order of the SELECT statement - Microsoft](https://docs.microsoft.com/en-us/sql/t-sql/queries/select-transact-sql?view=sql-server-ver15#logical-processing-order-of-the-select-statement)
 
 
-![Logical Processing Order](https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png)
+[[https://github.com/macfergusson/macfergusson.github.io/blob/main/images/Logical%20Processing%20Order.png]]
