@@ -68,3 +68,16 @@ FROM TableA AS A
 INNER JOIN TableB AS B
 ON A.someID = B.someID;
 ```
+
+
+### Other Sample Database Options
+
+Most RDBMS come with some form of sample database. [Here is the documentation for Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/samples/sql-samples-where-are?view=sql-server-ver15)
+
+* [SqlZOO](https://sqlzoo.net/)
+* [LearnSQL](https://learnsql.com/blog/ways-to-practice-sql-online/)
+* [SQLSkills](https://www.sqlskills.com/sql-server-resources/sql-server-demos/)
+* [Oracle Samples](https://docs.oracle.com/database/121/COMSC/overview.htm#COMSC005)
+* [Data repository collection](https://github.com/fivethirtyeight/data) at [FiveThirtyEight](https://data.fivethirtyeight.com/)
+* [Kaggle has a lot of sample options](https://www.kaggle.com/)
+* [Automated Github repository of various datasets](https://github.com/awesomedata/awesome-public-datasets)
