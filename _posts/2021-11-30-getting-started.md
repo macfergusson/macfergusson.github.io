@@ -50,3 +50,21 @@ Congratulations, you now have a full size database as your own personal sandbox 
 [Logical processing order of the SELECT statement - Microsoft](https://docs.microsoft.com/en-us/sql/t-sql/queries/select-transact-sql?view=sql-server-ver15#logical-processing-order-of-the-select-statement)
 
 <img src="/images/Logical%20Processing%20Order.png">
+
+
+---
+
+### Suggested Beginner's Best Practices
+
+* Use white space and line breaks to make your query easier to read.
+* Specify the fields in your SELECT. Don't just rely on SELECT * to pull back every column in the table.
+* Specify your JOIN types. INNER JOIN and LEFT OUTER are the two most common starting points.
+* Specify the conditions of your JOIN with the ON statement. How are your two tables related to each other? Don't make us guess.
+* Alias your tables to make your query easier to write and read. Aliases can be very short or descriptive.
+
+```tsql
+SELECT A.col1, A.col2, A.col3, B.col1, B.col2, B.col3
+FROM TableA AS A
+INNER JOIN TableB AS B
+ON A.someID = B.someID;
+```
