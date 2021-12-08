@@ -73,7 +73,16 @@ How many measurements are larger than the previous measurement?
 <details>  
 <summary>Spoiler warning Day 1 Part 1 Solution</summary>
 <pre><code>
-USE [TestDB];
+USE TestDB;
+GO
+
+DROP TABLE IF EXISTS dbo.advent1;
+
+CREATE TABLE dbo.advent1
+(
+    ID INT IDENTITY(1, 1) NOT NULL,
+    Depth INT NULL
+);
 GO
 
 SELECT SUM(DepthCount.DepthCompare)
@@ -159,7 +168,7 @@ Consider sums of a three-measurement sliding window. How many sums are larger th
 <details>
 <summary>Spoiler warning Day 1 Part 2 Solution</summary>
 <pre><code>
-USE [TestDB];
+USE TestDB;
 GO
 
 SELECT SUM(Agg.Increases)
