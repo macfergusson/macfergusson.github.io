@@ -6,7 +6,7 @@ Choose any programming/scripting language, and solve the puzzles each day.
 
 I am, obviously, trying to do them all in t-SQL. The first day's puzzles were no problem due to the joys of windowing functions. Do you know about LAG and LEAD?
 
---- Day 1: Sonar Sweep ---
+### --- Day 1: Sonar Sweep ---
 
 You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
 
@@ -102,7 +102,7 @@ FROM
 </details>
 
 
---- Part Two ---
+### --- Part Two ---
 
 Considering every single measurement isn't as useful as you expected: there's just too much noise in the data.
 
