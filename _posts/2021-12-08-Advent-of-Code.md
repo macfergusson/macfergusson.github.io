@@ -33,13 +33,9 @@ After following these instructions, you would have a horizontal position of 15 a
 
 Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
-
 <details>
-  
-  <summary>Spoiler warning Day 2 Part 1 Solution</summary>
-
+<summary>Spoiler warning Day 2 Part 1 Solution</summary>
 <pre><code>
-
 USE [TestDB];
 GO
 
@@ -74,9 +70,7 @@ FROM
               ) AS Depth
     FROM dbo.advent2
 ) AS FinalPosition;
-
 </code></pre>
-
 </details>
 
 
@@ -106,12 +100,9 @@ After following these new instructions, you would have a horizontal position of 
 Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
 
-<details>
-  
-  <summary>Spoiler warning Day 2 Part 2 Solution</summary>
-
-<pre><code>
-  
+<details>  
+<summary>Spoiler warning Day 2 Part 2 Solution</summary>
+<pre><code>  
 USE [TestDB];
 GO
 
@@ -148,8 +139,5 @@ FROM
         ) AS AimMovement
     ) AS CourseAdjustments
 ) FinalPosition;
-
-
 </code></pre>
-
 </details>
