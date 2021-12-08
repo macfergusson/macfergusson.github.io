@@ -3,6 +3,7 @@
 Been a bit busy, so catching up on the puzzles.
 
 --- Day 2: Dive! ---
+
 Now, you need to figure out how to pilot this thing.
 
 It seems like the submarine can take a series of commands like forward 1, down 2, or up 3:
@@ -46,12 +47,13 @@ DROP TABLE IF EXISTS advent2;
 
 CREATE TABLE advent2
 (
-    [Direction] VARCHAR(10),
-    [Distance] INT
+    recordid INT IDENTITY,
+    Direction VARCHAR(10),
+    Distance INT
 );
 GO
 
-SELECT FinalPosition.Horizontal * FinalPosition.Depth
+SELECT FinalPosition.Horizontal * FinalPosition.Depth HorizontalTimesDepth
 FROM
 (
     SELECT SUM(   CASE
@@ -79,6 +81,7 @@ FROM
 
 
 --- Part Two ---
+
 Based on your calculations, the planned course doesn't seem to make any sense. You find the submarine manual and discover that the process is actually slightly more complicated.
 
 In addition to horizontal position and depth, you'll also need to track a third value, aim, which also starts at 0. The commands also mean something entirely different than you first thought:
@@ -112,7 +115,39 @@ Using this new interpretation of the commands, calculate the horizontal position
 USE [TestDB];
 GO
 
-
+SELECT SUM(FinalPosition.Horizontal) * SUM(FinalPosition.DepthChange) AS HorizontalTimesDepth
+FROM
+(
+    SELECT CourseAdjustments.Horizontal,
+           CourseAdjustments.AimAdjust,
+           CourseAdjustments.CurrentAim,
+           CourseAdjustments.Horizontal * CourseAdjustments.CurrentAim AS DepthChange
+    FROM
+    (
+        SELECT AimMovement.Horizontal,
+               AimMovement.AimAdjust,
+               SUM(AimMovement.AimAdjust) OVER (ORDER BY recordid ROWS UNBOUNDED PRECEDING) AS CurrentAim
+        FROM
+        (
+            SELECT recordid,
+                   CASE
+                       WHEN direction = 'forward' THEN
+                           Distance
+                       ELSE
+                           0
+                   END AS Horizontal,
+                   CASE
+                       WHEN direction = 'down' THEN
+                           Distance
+                       WHEN direction = 'up' THEN
+                           Distance * -1
+                       ELSE
+                           0
+                   END AS AimAdjust
+            FROM dbo.advent2
+        ) AS AimMovement
+    ) AS CourseAdjustments
+) FinalPosition;
 
 
 </code></pre>
