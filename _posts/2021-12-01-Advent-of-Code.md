@@ -15,17 +15,6 @@ I am, obviously, trying to do them all in t-SQL. The first day's puzzles were no
 
 USE [TestDB];
 GO
-
-/****** Object:  StoredProcedure [dbo].[advent1_sp]    Script Date: 12/3/2021 1:36:23 AM ******/
-SET ANSI_NULLS ON;
-GO
-
-SET QUOTED_IDENTIFIER ON;
-GO
-
-ALTER PROCEDURE [dbo].[advent1_sp]
-AS
-BEGIN
     SELECT SUM(DepthCount.DepthCompare)
     FROM
     (
@@ -48,7 +37,6 @@ BEGIN
             FROM dbo.advent1
         ) AS DepthData
     ) DepthCount;
-END;
 
 </code></pre>
 
@@ -67,16 +55,7 @@ END;
   USE [TestDB];
 GO
 
-/****** Object:  StoredProcedure [dbo].[advent1part2_sp]    Script Date: 12/3/2021 1:36:27 AM ******/
-SET ANSI_NULLS ON;
-GO
 
-SET QUOTED_IDENTIFIER ON;
-GO
-
-ALTER PROC [dbo].[advent1part2_sp]
-AS
-BEGIN
     SELECT SUM(Agg.Increases)
     FROM
     (
@@ -94,7 +73,7 @@ BEGIN
             FROM dbo.advent1
         ) AS Group3
     ) Agg;
-END;
+
 
 </code></pre>
 
