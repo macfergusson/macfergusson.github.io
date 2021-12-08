@@ -36,14 +36,14 @@ Calculate the horizontal position and depth you would have after following the p
 <details>
 <summary>Spoiler warning Day 2 Part 1 Solution</summary>
 <pre><code>
-USE [TestDB];
+USE TestDB;
 GO
 
 DROP TABLE IF EXISTS advent2;
 
 CREATE TABLE advent2
 (
-    recordid INT IDENTITY,
+    RecordID INT IDENTITY,
     Direction VARCHAR(10),
     Distance INT
 );
@@ -53,16 +53,16 @@ SELECT FinalPosition.Horizontal * FinalPosition.Depth HorizontalTimesDepth
 FROM
 (
     SELECT SUM(   CASE
-                      WHEN direction = 'forward' THEN
+                      WHEN Direction = 'forward' THEN
                           Distance
                       ELSE
                           0
                   END
               ) AS Horizontal,
            SUM(   CASE
-                      WHEN direction = 'down' THEN
+                      WHEN Direction = 'down' THEN
                           Distance
-                      WHEN direction = 'up' THEN
+                      WHEN Direction = 'up' THEN
                           Distance * -1
                       ELSE
                           0
@@ -103,7 +103,7 @@ Using this new interpretation of the commands, calculate the horizontal position
 <details>  
 <summary>Spoiler warning Day 2 Part 2 Solution</summary>
 <pre><code>  
-USE [TestDB];
+USE TestDB;
 GO
 
 SELECT SUM(FinalPosition.Horizontal) * SUM(FinalPosition.DepthChange) AS HorizontalTimesDepth
@@ -117,20 +117,20 @@ FROM
     (
         SELECT AimMovement.Horizontal,
                AimMovement.AimAdjust,
-               SUM(AimMovement.AimAdjust) OVER (ORDER BY recordid ROWS UNBOUNDED PRECEDING) AS CurrentAim
+               SUM(AimMovement.AimAdjust) OVER (ORDER BY RecordID ROWS UNBOUNDED PRECEDING) AS CurrentAim
         FROM
         (
-            SELECT recordid,
+            SELECT RecordID,
                    CASE
-                       WHEN direction = 'forward' THEN
+                       WHEN Direction = 'forward' THEN
                            Distance
                        ELSE
                            0
                    END AS Horizontal,
                    CASE
-                       WHEN direction = 'down' THEN
+                       WHEN Direction = 'down' THEN
                            Distance
-                       WHEN direction = 'up' THEN
+                       WHEN Direction = 'up' THEN
                            Distance * -1
                        ELSE
                            0
