@@ -2,7 +2,7 @@
 
 Been a bit busy, so catching up on the puzzles.
 
---- Day 2: Dive! ---
+### --- Day 2: Dive! ---
 
 Now, you need to figure out how to pilot this thing.
 
@@ -80,7 +80,7 @@ FROM
 </details>
 
 
---- Part Two ---
+### --- Part Two ---
 
 Based on your calculations, the planned course doesn't seem to make any sense. You find the submarine manual and discover that the process is actually slightly more complicated.
 
