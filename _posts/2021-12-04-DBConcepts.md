@@ -3,6 +3,7 @@
 
 [Diagramming Tutorials](https://youtube.com/playlist?list=PLUoebdZqEHTwbYD8oo6Wr81Xb7uCAh_oz)
 
+[Database Design Basics](https://support.microsoft.com/en-us/office/database-design-basics-eb2159cf-1e30-401a-8084-bd4f9c9ca1f5)
 
 [A Free Database Designer for Developers and Analysts](https://dbdiagram.io/home)
 
