@@ -61,6 +61,12 @@ Congratulations, you now have a full size database as your own personal sandbox 
 * Specify your JOIN types. INNER JOIN and LEFT OUTER are the two most common starting points.
 * Specify the conditions of your JOIN with the ON statement. How are your two tables related to each other? Don't make us guess.
 * Alias your tables to make your query easier to write and read. Aliases can be very short or descriptive.
+* Learn about SET XACT_ABORT and whether you need it for your SP to behave the way you think it should
+* Define good datatypes (not over sized for no reason)
+* Make sure parameters and variables you are comparing against columns match datatypes.
+* Functions can kill your query performance, try not to rely on them. If you do, use them outside of/prior to  your big queries.
+
+
 
 ```tsql
 SELECT A.col1, A.col2, A.col3, B.col1, B.col2, B.col3
