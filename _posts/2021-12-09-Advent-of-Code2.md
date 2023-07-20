@@ -252,17 +252,3 @@ SELECT 941 * 3154;
 
 </code></pre>
 </details>
-
-
-### --- Part Two ---
-
-
-
-
-<details>  
-<summary>Spoiler warning Day 3 Part 2 Solution</summary>
-<pre><code>  
-
-
-</code></pre>
-</details>
