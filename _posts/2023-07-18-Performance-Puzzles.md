@@ -60,7 +60,7 @@ ORM frameworks can sometimes generate complex and convoluted queries that don't 
 
 This is a query hint that you can embed in stored procedures that will force a new query plan to be calculated for that query each time. This increases CPU cost but may be worth it for wildly varying parameter values in complex logic. This is not something that you can embed in a view definition, however, and should certainly not be slathered around liberally on every query.
 
-####  OPTION ( OPTIMIZE FOR UNKNOWN ); – AKA Optimize for Mediocre
+####  OPTION ( OPTIMIZE FOR UNKNOWN ) – AKA Optimize for Mediocre
 
 This is a query hint that tells your database engine that you expect high variance in your input parameters and you'd like the most generic plan possible. Understand that this means you are purposefully asking for what is NOT the most optimal query plan for the current sniffed parameter values, which means you are likely to get a plan that is sorta kinda OK for a wide variety of situations but good for none of them. Again, this is not something that should be applied in a wanton fashion to all queries.
 
