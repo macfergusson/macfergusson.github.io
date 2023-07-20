@@ -4,7 +4,7 @@ Dealing with performance issues in database systems can be quite tricky, especia
 
 I'll try to provide some insights and tips based on a situation I encountered recently.
 
-This was a tricky one to pin down. We were seeing error logs for ORM queries against a database object in one specific app database that people believed was a simple single table query, but only for specific clients in specific cases, and we couldn't catch the query misbehaving on the database host. However, it turned out this object was actually a view masking significant complexity, and it ran against our read-only replica.
+This was a slippery one to pin down. We were seeing error logs for ORM queries against a database object in one specific app database that people believed was a simple single table query, but only for specific clients in specific cases, and we couldn't catch the query misbehaving on the database host. However, it turned out this object was actually a view masking significant complexity, and it ran against our read-only replica.
 
 Once I was able to catch the sessions running long and hitting the thirty-second timeout (did you know about this default in .NET calls to the database?) on the secondary replica, I was able to isolate an sql_handle and clear out the plan cache for that particular query without flushing everything in cache for the entire database or, worse, the whole server.
 
