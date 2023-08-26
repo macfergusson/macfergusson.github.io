@@ -6,7 +6,7 @@ For a quick personal use testing setup, everything that follows is free and can 
 
 [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-[WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
+[WSL - Windows Subsystem for Linux](https://learn.microsoft.com/en-us/windows/wsl/install)
 
 [SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16)
 
