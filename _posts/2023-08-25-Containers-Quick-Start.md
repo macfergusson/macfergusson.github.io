@@ -58,3 +58,13 @@ With that all finished, open SSMS, and use a server name of `localhost,14331` an
 Any time you restart your PC or have any trouble connecting, ensure Docker Desktop is running and check that the SQL Server container in Docker is running.
 
 You are now free to roam about the databases!
+
+### Additional Reading
+
+[Docker - Microsoft SQL Server - Ubuntu based images](https://hub.docker.com/_/microsoft-mssql-server)
+[Quickstart: Run SQL Server Linux container images with Docker](https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-ver16&pivots=cs1-powershell)
+[Configure and customize SQL Server Docker containers](https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-docker-container-configure?view=sql-server-ver16&pivots=cs1-powershell)
+[MS SQL Server in Docker](https://medium.com/@zzpzaf.se/ms-sql-server-in-docker-b0397a55859c)
+[Restore a SQL Server database in a Linux container](https://learn.microsoft.com/en-us/sql/linux/tutorial-restore-backup-in-sql-server-container?view=sql-server-ver16)
+[Docker CLI](https://docs.docker.com/engine/reference/commandline/cli/)
+[Install Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/)
