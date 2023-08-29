@@ -16,7 +16,7 @@ Side note: If all this containerization talk is a bit beyond where you're at rig
 
 ### The Basic Setup
 
-The following Powershell script will create a brand new instance of SQL Server inside of a container, so if you muck it up you can just delete the container, and run the script again to start completely fresh.
+Once you've installed the necessary components listed above, the following Powershell commands will create a brand new instance of SQL Server inside of a container, so if you muck it up you can just delete the container, and run the command again to start fresh.
 
 ```ps1
 # build container with SQL Server
@@ -39,14 +39,14 @@ Say you have a bak file that you want to restore in to your fresh containerized 
 
 ```ps1
 # create backup folder inside container
-#docker exec -it mssql_docker_1 mkdir /var/opt/mssql/backup
+docker exec -it mssql_docker_1 mkdir /var/opt/mssql/backup
 
 # fetch sample database bak file
-#cd ~
-#curl -L -o wwi.bak 'https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak'
+cd ~
+curl -L -o wwi.bak 'https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak'
 
 # copy bak file to backup folder in container
-#docker cp wwi.bak mssql_docker_1:/var/opt/mssql/backup
+docker cp wwi.bak mssql_docker_1:/var/opt/mssql/backup
 ```
 
 Now that we have a bak file in our persisted volume, we can do a good old fashioned t-sql restore command:
