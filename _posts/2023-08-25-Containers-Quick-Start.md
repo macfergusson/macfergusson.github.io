@@ -12,6 +12,8 @@ For a quick personal use testing setup, everything that follows is free and can 
 
 Once you have the WSL and Docker installed, you essentially have a Linux Virtual Machine living inside of your Windows Operating System, and it is now prepared to spin up containers inside of that VM.
 
+Side note: If all this containerization talk is a bit beyond where you're at right now, skip it and just go for [the basic quick start.](https://macfergusson.github.io/2021/11/30/getting-started.html)
+
 The following Powershell script will create a brand new instance of SQL Server inside of a container, so if you muck it up you can just delete the container, and run the script again to start completely fresh.
 
 ```ps1

@@ -20,6 +20,10 @@ Follow the directions to attach the database.
 
 Congratulations, you now have a full size database as your own personal sandbox to play in!
 
+### Optional: Containerized!
+
+[A different, somewhat more advanced approach to a test environment.](https://macfergusson.github.io/2023/08/25/Containers-Quick-Start.html)
+
 ---
 
 ### Online Query Sharing

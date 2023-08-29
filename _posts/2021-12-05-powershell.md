@@ -1,14 +1,31 @@
+## Powershell Related Notes and Resources
 
-### Powershell notes
+[Intro to Powershell](http://www.powershellpro.com/powershell-tutorial-introduction/)
 
+[Official PS Docs](https://technet.microsoft.com/en-us/scriptcenter/powershell.aspx)
 
 [dbatools is a free PowerShell module with over 500 SQL Server best practice, administration, development and migration commands included](https://dbatools.io/commands/)
 
-
 [PowerShell Universal - Ironman Software](https://ironmansoftware.com/powershell-universal)
 
+[SQL Server Backups](https://www.mssqltips.com/sqlservertip/1862/backup-sql-server-databases-with-a-windows-powershell-script/)
 
-SSRS things!
+[Check Latest SQL Server Backup Date](https://www.mssqltips.com/sqlservertip/1784/check-the-last-sql-server-backup-date-using-windows-powershell/)
+
+[List Local Admins](https://4sysops.com/archives/create-a-list-of-local-administrators-with-powershell/)
+
+[Excel Import](https://github.com/dfinke/ImportExcel)
+
+[SQL Server Tips in PS](https://www.mssqltips.com/sql-server-tip-category/81/powershell/)
+
+
+### SSRS things!
+
+[SSRS Data in PS](https://www.mssqltips.com/sqlservertip/4294/accessing-sql-server-reporting-services-data-using-powershell/)
+
+[Automate Data Source Deployment](https://www.mssqltips.com/sqlservertip/4429/sql-server-reporting-services-data-source-deployment-automation-with-powershell/)
+
+
 ```
 [string] $url = "https://XXXXXXX.XXXX.XXXX.XXXX/Reports";
 
