@@ -20,7 +20,7 @@ Once you've installed the necessary components listed above, the following Power
 
 ```ps1
 # build container with SQL Server
-docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='Qqi5acb9rSJ6bJ1!' --name 'mssql_docker_1' -p 14331:1433 -v mssqldata:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2022-latest
+docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='nL5G$6375feDTq' --name 'mssql_docker_1' -p 14331:1433 -v mssqldata:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2022-latest
 ```
 
 This is a slightly customized template that you can update to your preferences, for example setting your own SA password, or altering the ports. 
