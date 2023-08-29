@@ -14,52 +14,52 @@ Once you have the WSL and Docker installed, you essentially have a Linux Virtual
 
 Side note: If all this containerization talk is a bit beyond where you're at right now, skip it and just go for [the basic quick start.](https://macfergusson.github.io/2021/11/30/getting-started.html)
 
+### The Basic Setup
+
 The following Powershell script will create a brand new instance of SQL Server inside of a container, so if you muck it up you can just delete the container, and run the script again to start completely fresh.
 
 ```ps1
-Function Check-RunAsAdministrator()
-{
-  #Get current user context
-  $CurrentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
-  
-  #Check user is running the script is member of Administrator Group
-  if($CurrentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator))
-  {
-       Write-host "Script is running with Administrator privileges!"
-  }
-  else
-    {
-       #Create a new Elevated process to Start PowerShell
-       $ElevatedProcess = New-Object System.Diagnostics.ProcessStartInfo "PowerShell";
- 
-       # Specify the current script path and name as a parameter
-       $ElevatedProcess.Arguments = "& '" + $script:MyInvocation.MyCommand.Path + "'"
- 
-       #Set the Process to elevated
-       $ElevatedProcess.Verb = "runas"
- 
-       #Start the new elevated process
-       [System.Diagnostics.Process]::Start($ElevatedProcess)
- 
-       #Exit from the current, unelevated, process
-       Exit
- 
-    }
-}
- 
-#Check Script is running with Elevated Privileges
-Check-RunAsAdministrator
-
-docker run -d --name mssql_docker_1 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='jKXTqjbP@7KMzB' -p 14331:1433  -e MSSQL_AGENT_ENABLED=True -d mcr.microsoft.com/mssql/server:2022-latest
+# build container with SQL Server
+docker run -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD='Qqi5acb9rSJ6bJ1!' --name 'mssql_docker_1' -p 14331:1433 -v mssqldata:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2022-latest
 ```
 
-This is a slightly customized template that you can update to your preferences, for example setting  your own SA password, or altering the ports. If you have a local SQL Server instance running on the default port of 1433, and you want to run a containerized SQL Server, they can't both be running on the same port, so this template maps the port 1433 inside of the container to port 14331 on your desktop.
+This is a slightly customized template that you can update to your preferences, for example setting your own SA password, or altering the ports. 
+If you have a local SQL Server instance running on the default port of 1433, and you want to run a containerized SQL Server, they can't both be running on the same port, so this template maps the port 1433 inside of the container to port 14331 on your desktop.
+Note that this also uses the volume -v option, to define where we put the SQL Server data files in a persistent location. This means that even if we delete this container, the data volume will still be there if we recreate the container.
 
 With that all finished, open SSMS, and use a server name of `localhost,14331` and SQL Server Authentication with the SA credentials you chose.
 
 Any time you restart your PC or have any trouble connecting, ensure Docker Desktop is running and check that the SQL Server container in Docker is running.
 
-You are now free to roam about the databases!
+You are now free to roam about the database!
+
+### Restoring a Backup
+
+Say you have a bak file that you want to restore in to your fresh containerized SQL Server instance. We can use the persistent volume we talked about earlier, and copy backups in to it, so the containerized SQL Server instance can see it.
+
+```ps1
+# create backup folder inside container
+#docker exec -it mssql_docker_1 mkdir /var/opt/mssql/backup
+
+# fetch sample database bak file
+#cd ~
+#curl -L -o wwi.bak 'https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak'
+
+# copy bak file to backup folder in container
+#docker cp wwi.bak mssql_docker_1:/var/opt/mssql/backup
+```
+
+Now that we have a bak file in our persisted volume, we can do a good old fashioned t-sql restore command:
+
+```sql
+RESTORE FILELISTONLY FROM DISK = '/var/opt/mssql/backup/wwi.bak'
+
+RESTORE DATABASE WideWorldImporters FROM DISK = '/var/opt/mssql/backup/wwi.bak' 
+WITH MOVE 'WWI_Primary' TO '/var/opt/mssql/data/WideWorldImporters.mdf'
+, MOVE 'WWI_UserData' TO '/var/opt/mssql/data/WideWorldImporters_userdata.ndf'
+, MOVE 'WWI_Log' TO '/var/opt/mssql/data/WideWorldImporters.ldf'
+, MOVE 'WWI_InMemory_Data_1' TO '/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1'
+```
 
 ### Additional Reading
 
