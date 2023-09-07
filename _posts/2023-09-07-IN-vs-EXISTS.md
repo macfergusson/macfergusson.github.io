@@ -57,9 +57,10 @@ GO
 ```
 Look at everything the IN attempts to do...
 
+(Images are clickable if they are too small to see)
 [![](/images/INvEXIST1.png)](/images/INvEXIST1.png)
 
-<img src="/images/INvEXIST2.png">
+[![](/images/INvEXIST2.png)](/images/INvEXIST2.png)
 
 Keep in mind that the results of these two queries when a column actually has NULLs in it are different!
 In our case, we have a nullable column but no NULLs, so the engine must assume it's POSSIBLE for one of the values to be NULL.
@@ -85,9 +86,9 @@ SELECT ID FROM Numbers WHERE NOT EXISTS ( SELECT * FROM BigNumbers WHERE Numbers
 GO
 ```
 
-<img src="/images/INvEXIST3.png">
+[![](/images/INvEXIST3.png)](/images/INvEXIST3.png)
 
-<img src="/images/INvEXIST4.png">
+[![](/images/INvEXIST4.png)](/images/INvEXIST4.png)
 
 So as we can see clearly here, when null handling matters NOT EXISTS seems to take a major advantage in performance, but without the nullability concern it rapidly collapses down to the same query plan behind the scenes.
 
@@ -116,9 +117,9 @@ SELECT ID FROM Numbers WHERE NOT EXISTS ( SELECT * FROM BigNumbers WHERE Numbers
 GO
 ```
 
-<img src="/images/INvEXIST5.png">
+[![](/images/INvEXIST5.png)](/images/INvEXIST5.png)
 
-<img src="/images/INvEXIST6.png">
+[![](/images/INvEXIST6.png)](/images/INvEXIST6.png)
 
 Our plans aren't getting simpler, but our logical page reads dropped a nice chunk for such a simple example.
 
@@ -135,4 +136,4 @@ INDEXING!
 ### In Conclusion
 
 
-<img src="/images/DBdidthis.png">
+[![](/images/DBdidthis.png)](/images/DBdidthis.png)
