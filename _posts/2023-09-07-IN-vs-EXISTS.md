@@ -57,7 +57,7 @@ GO
 ```
 Look at everything the IN attempts to do...
 
-<img src="/images/INvEXIST1.png">
+[![](/images/INvEXIST1.png)](/images/INvEXIST1.png)
 
 <img src="/images/INvEXIST2.png">
 
