@@ -1,8 +1,6 @@
 ## NOT IN vs NOT EXISTS, Who Would Win?
 
-Based on a post from the prolific Pinal Dave:
-
-https://twitter.com/pinaldave/status/1699244420418146747
+[Based on a post from the prolific Pinal Dave:](https://twitter.com/pinaldave/status/1699244420418146747)
 
 In the fight between IN and EXISTS, who would win? In this case, specifically we look at the NOT variation of those.
 
@@ -60,6 +58,7 @@ GO
 Look at everything the IN attempts to do...
 
 <img src="/images/INvEXIST1.PNG">
+
 <img src="/images/INvEXIST2.PNG">
 
 Keep in mind that the results of these two queries when a column actually has NULLs in it are different!
@@ -87,6 +86,7 @@ GO
 ```
 
 <img src="/images/INvEXIST3.PNG">
+
 <img src="/images/INvEXIST4.PNG">
 
 So as we can see clearly here, when null handling matters NOT EXISTS seems to take a major advantage in performance, but without the nullability concern it rapidly collapses down to the same query plan behind the scenes.
@@ -117,6 +117,7 @@ GO
 ```
 
 <img src="/images/INvEXIST5.PNG">
+
 <img src="/images/INvEXIST6.PNG">
 
 Our plans aren't getting simpler, but our logical page reads dropped a nice chunk for such a simple example.
@@ -132,5 +133,6 @@ Proper constraints on your columns can really help!
 INDEXING!
 
 ### In Conclusion
+
 
 <img src="/images/DBdidthis.PNG">
