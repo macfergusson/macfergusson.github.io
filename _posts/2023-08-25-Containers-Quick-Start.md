@@ -77,3 +77,4 @@ WITH MOVE 'WWI_Primary' TO '/var/opt/mssql/data/WideWorldImporters.mdf'
 
 [Install Docker Desktop on Windows](https://docs.docker.com/desktop/install/windows-install/)
 
+[Setting Up SQL Server Databases In Docker - Rich in SQL](https://richinsql.com/2022/01/setting-up-sql-server-databases-in-docker/)
