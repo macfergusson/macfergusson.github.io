@@ -2,66 +2,62 @@
 
 #### Writing Efficient and Secure SQL Queries
 
-1. **Parameterized Queries:** Prevent SQL injection by using parameterized queries for dynamic SQL commands.
+**Parameterized Queries:** Prevent SQL injection by using parameterized queries for dynamic SQL commands.
 
-2. **Select Required Columns Only:** Specify only necessary columns instead of using `SELECT *` to improve performance.
+**Select Required Columns Only:** Specify only necessary columns instead of using `SELECT *` to improve performance.
 
-3. **Joins Over Subqueries:** Prefer joins over subqueries for better optimization and performance.
+**Joins Over Subqueries:** Prefer joins over subqueries for better optimization and performance. Avoid large lists of values fed to IN clauses.
 
-4. **Effective Indexing:** Use indexes strategically to enhance query performance but avoid excessive indexing to prevent slowdowns in data modification operations.
+**Effective Indexing:** Use indexes strategically to enhance query performance but avoid excessive indexing to prevent slowdowns in data modification operations. Around 5 indexes per table is a good guideline.
 
-5. **Avoid Functions on Indexed Columns:** Refrain from using functions on indexed columns in the WHERE clause to maintain index efficiency.
+**Avoid Functions on Indexed Columns:** Refrain from using functions in the WHERE clause or in JOIN conditions.
 
-6. **Batch Operations:** Use batching for large-scale inserts and updates to reduce server load.
+**Batch Operations:** Use batching for large-scale inserts and updates to reduce server load.
 
-7. **SET NOCOUNT ON:** Start stored procedures with `SET NOCOUNT ON;` to improve performance by not returning row affected messages.
+**Minimize Cursor Use:** Avoid cursors for better performance, opting for set-based operations where possible.
 
-8. **Minimize Cursor Use:** Avoid cursors for better performance, opting for set-based operations where possible.
+**SET NOCOUNT ON:** Start stored procedures with `SET NOCOUNT ON;` to improve performance by not returning row affected messages.
 
 #### UI and Data Handling Considerations
 
-9. **UI Feedback for User Input:** Ensure the UI adequately informs users about input restrictions and validations.
+**UI Feedback for User Input:** Ensure the UI adequately informs users about input restrictions and validations. If they can only search for a 10 character string, does it warn them when they put in 12 characters?
 
-10. **Optimized Views:** Be cautious with nested views and Common Table Expressions (CTEs) as they can impact query efficiency. Ensure views don't carry unnecessary data.
+**Optimized Views:** Be cautious with nested views and Common Table Expressions (CTEs) as they can impact query efficiency. Ensure views don't carry unnecessary objects that aren't being used for your purpose, as this introduces extra baggage to the execution plan.
 
-11. **Temporary Tables:** Temp tables are session-scoped; explicit dropping is not required but does no harm.
+**Temporary Tables:** Temp tables are session-scoped; explicit dropping is not required, but isn't likely to hurt.
 
-12. **Efficient String Searching:** Favor "starts with" logic over broad wildcard searches for better performance.
+**Efficient String Searching:** Favor "starts with" logic over broad wildcard searches for better performance. Leading wildcards are the enemy of efficient querying.
 
-13. **Use Range Comparisons:** Prefer inequalities for numeric data types like dates or monetary values over string searches.
+**Use Range Comparisons:** Prefer inequalities for numeric data types like dates or monetary values over string searches.
 
-14. **Avoid Fuzzy Matching on Numeric Data:** If product requirements permit, do not use fuzzy matching or string searches for numeric comparisons.
+**Avoid Fuzzy Matching on Numeric Data:** If product requirements permit, do not use fuzzy matching or string searches for numeric comparisons.
 
 #### SQL Coding Practices
 
-15. **Readable Formatting:** Use whitespace and line breaks to enhance query readability.
+**Explicit Field Selection:** Always specify fields in SELECT statements rather than using `SELECT *`.
 
-16. **Explicit Field Selection:** Always specify fields in SELECT statements rather than using `SELECT *`.
+**Specify JOIN Types and Conditions:** Clearly define JOIN types and conditions to avoid ambiguity.
 
-17. **Specify JOIN Types and Conditions:** Clearly define JOIN types and conditions to avoid ambiguity.
+**Alias Tables:** Use table aliases for clearer and more concise SQL code, but name them something legible. Always qualify your columns with the object they are referencing.
 
-18. **Alias Tables:** Use table aliases for clearer and more concise SQL code.
+**Transaction Management:** Understand the use of `SET XACT_ABORT` for expected transaction behavior.
 
-19. **Transaction Management:** Understand the use of `SET XACT_ABORT` for expected transaction behavior.
+**Data Types and Comparisons:** Ensure proper data types for all fields and match parameter/variable data types to column types to avoid performance issues from implicit conversions.
 
-20. **Data Types and Comparisons:** Ensure proper data types for all fields and match parameter/variable data types to column types to avoid performance issues.
-
-21. **Minimize Function Use:** Avoid relying on functions within queries to prevent performance degradation.
+**Minimize Function Use:** Avoid relying on functions within queries to prevent performance degradation.
 
 #### Performance and Reliability
 
-22. **Avoid NOLOCK/READ UNCOMMITTED:** Remove these hints to ensure data consistency.
+**Avoid NOLOCK/READ UNCOMMITTED:** Remove these hints to ensure data consistency.
 
-23. **Include ELSE in CASE Statements:** Always handle unexpected results in CASE statements.
+**Include ELSE in CASE Statements:** Always handle unexpected results in CASE statements.
 
-24. **Use Table Variables Wisely:** Prefer table variables for small datasets and temp tables for larger ones.
+**Use Table Variables Wisely:** Prefer table variables for small datasets and temp tables for larger ones. Around 50 rows should be your upper limit for a table variable.
 
-25. **Avoid SQL Anti-patterns:** This includes avoiding implicit type conversions, large IN clauses, non-parameterized queries, improper transaction management, non-SARGable predicates, and leading wildcard LIKE comparisons.
-
-26. **Reorder Joins and Applies:** Optimize join order by starting with the most restrictive conditions.
+**Reorder Joins and Applies:** Optimize join order by starting with the most restrictive conditions where possible.
 
 #### Developer Responsibility
 
-27. **Question and Push Back:** Developers should question and sometimes push back against feature suggestions that compromise efficiency or performance, as optimizing code is their responsibility, not that of product owners or project managers.
+**Question and Push Back:** Keep in mind that product owners and project managers aren't supposed to understand what makes efficient and fast code in the app and in the database. It isn't their job, it's our job. So it is our responsibility to question things and some times even push back against feature suggestions that will make things worse instead of better.
 
 By incorporating these practices, developers can write SQL queries that are not only efficient and secure but also maintainable and scalable. Regularly reviewing and optimizing SQL code based on these guidelines can significantly enhance database and application performance.
