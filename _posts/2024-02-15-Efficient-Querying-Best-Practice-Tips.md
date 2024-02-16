@@ -17,8 +17,16 @@ command.Parameters.AddWithValue("@Username", username);
 **Select Required Columns Only:** Always explicitly specify columns instead of using `SELECT *`. Don't `SELECT` columns that aren't being used.
 
 **Joins Over Subqueries:** Prefer joins over subqueries for better optimization and performance. Avoid large lists of values fed to IN clauses.
+Instead of using a subquery:
+```sql
+SELECT * FROM Orders WHERE CustomerID IN (SELECT CustomerID FROM Customers WHERE City = 'London');
+```
+Use a join:
+```sql
+SELECT Orders.* FROM Orders JOIN Customers ON Orders.CustomerID = Customers
+```
 
-**Effective Indexing:** Use indexes strategically to enhance query performance but avoid excessive indexing to prevent slowdowns in data modification operations. Around 5 indexes per table is a good guideline.
+**Effective Indexing:** Use indexes strategically to enhance query performance but avoid excessive indexing to prevent slowdowns in data modification operations. Around 5 indexes per table is a good starting guideline, and anything beyond that requires careful consideration.
 
 **Avoid Functions on Indexed Columns:** Refrain from using functions in the WHERE clause or in JOIN conditions.
 
@@ -26,7 +34,12 @@ command.Parameters.AddWithValue("@Username", username);
 
 **Minimize Cursor Use:** Avoid cursors for better performance, opting for set-based operations where possible.
 
-**SET NOCOUNT ON:** Start stored procedures with `SET NOCOUNT ON;` to improve performance by not returning row affected messages.
+**SET NOCOUNT ON:** Start stored procedures with `SET NOCOUNT ON;` to improve performance by not returning "row affected" messages.
+```sql
+(615 rows affected)
+(1 rows affected)
+(15 rows affected)
+```
 
 #### UI and Data Handling Considerations
 
