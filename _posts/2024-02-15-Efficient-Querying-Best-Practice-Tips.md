@@ -28,7 +28,7 @@ SELECT Orders.* FROM Orders JOIN Customers ON Orders.CustomerID = Customers
 
 **Effective Indexing:** Use indexes strategically to enhance query performance but avoid excessive indexing to prevent slowdowns in data modification operations. Around 5 indexes per table is a good starting guideline, and anything beyond that requires careful consideration.
 
-**Avoid Functions on Indexed Columns:** Refrain from using functions in the WHERE clause or in JOIN conditions.
+**Avoid Functions on Indexed Columns:** Refrain from using functions in the WHERE clause or in JOIN conditions as this prevents the use of the index.
 
 **Batch Operations:** Use batching for large-scale inserts and updates to reduce server load. Relational databases are designed for set based operations on data.
 
