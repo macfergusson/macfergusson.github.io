@@ -66,8 +66,6 @@ SELECT * FROM Orders WHERE OrderDate >= '2020-01-01' AND OrderDate <= '2020-12-3
 
 #### SQL Coding Practices
 
-**Explicit Field Selection:** Always specify fields in SELECT statements rather than using `SELECT *`.
-
 **Specify JOIN Types and Conditions:** Clearly define JOIN types and conditions to avoid ambiguity.
 
 **Alias Tables:** Use table aliases for clearer and more concise SQL code, but name them something legible. Always qualify your columns with the object they are referencing.
