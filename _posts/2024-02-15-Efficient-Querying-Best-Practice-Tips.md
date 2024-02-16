@@ -30,7 +30,7 @@ SELECT Orders.* FROM Orders JOIN Customers ON Orders.CustomerID = Customers
 
 **Avoid Functions on Indexed Columns:** Refrain from using functions in the WHERE clause or in JOIN conditions as this prevents the use of the index.
 
-**Batch Operations:** Use batching for large-scale inserts and updates to reduce server load. Relational databases are designed for set based operations on data.
+**Batch Operations:** Use batching for large-scale inserts and updates to reduce server load. Relational databases are designed for set based operations on data, and t-SQL allows us to insert multiple rows at a time.
 
 **Minimize Cursor Use:** Avoid cursors for better performance, opting for set-based operations where possible.
 
