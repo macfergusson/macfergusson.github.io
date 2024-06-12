@@ -55,8 +55,7 @@ I've started collecting rules clarifications from the dev team, and will keep th
 
 <https://x.com/davflamerock/status/1800674819769614362> - Lasting effects fall off when changing zones
  
-Other useful resources/community tools:
-
+### Other useful resources/community tools:
 
 <https://www.swudb.com/> - Card database and collection tracking
 
